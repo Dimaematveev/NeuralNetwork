@@ -52,8 +52,14 @@ namespace NeuralNetworks.BL
                 sum += inputs[i] * Weights[i];
             }
             //Сигмойда для вычисления вых. рез
-
-            Output = Sigmoid(sum);
+            if (NeuronType != NeuronType.Input)
+            {
+                Output = Sigmoid(sum);
+            }
+            else
+            {
+                Output = sum;
+            }
             return Output;
         }
 

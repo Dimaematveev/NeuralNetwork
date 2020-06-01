@@ -23,6 +23,11 @@ namespace NeuralNetworks.BL
         /// </summary>
         public Topology Topology { get; }
 
+
+        /// <summary>
+        /// Создание нейронки
+        /// </summary>
+        /// <param name="topology">Топология нейронной сети</param>
         public NeuralNetwork(Topology topology)
         {
             Topology = topology;
