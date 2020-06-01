@@ -15,6 +15,10 @@ namespace NeuralNetworks.BL
         /// </summary>
         public List<double> Weights { get; }
         /// <summary>
+        /// Входные значения
+        /// </summary>
+        public List<double> Inputs { get; }
+        /// <summary>
         /// Тип нейрона
         /// </summary>
         public NeuronType NeuronType { get; }
@@ -22,6 +26,11 @@ namespace NeuralNetworks.BL
         /// Сохранение состояния. Результат после действий всех коэфф
         /// </summary>
         public double Output { get; private set; }
+
+        /// <summary>
+        /// Дельта
+        /// </summary>
+        public double Delta { get; private set; }
 
 
         /// <summary>
@@ -33,19 +42,44 @@ namespace NeuralNetworks.BL
         {
             NeuronType = neuronType;
             Weights = new List<double>();
+            Inputs = new List<double>();
+            InitWeightsRandomValue(inputCount);
 
+        }
+
+
+        /// <summary>
+        /// заполнить случайными числами вес
+        /// </summary>
+        /// <param name="inputCount"></param>
+        private void InitWeightsRandomValue(int inputCount)
+        {
+            Random rnd = new Random();
             for (int i = 0; i < inputCount; i++)
             {
-                Weights.Add(1);
+                if (NeuronType == NeuronType.Input)
+                {
+                    Weights.Add(1);
+                }
+                else
+                {
+                    Weights.Add(rnd.NextDouble());
+                }
+                Inputs.Add(0);
             }
+
         }
         /// <summary>
-        /// Слева направо сеть. 
+        /// Слева направо сеть.  и сохранение значений
         /// </summary>
         /// <param name="inputs">Список вход. сигналов - на 1 нейрон приходят, кол-во сигналов==кол-во весов</param>
         /// <returns>Сохранение состояния</returns>
         public double FeedForward(List<double> inputs)
         {
+            for (int i = 0; i < inputs.Count; i++)
+            {
+                Inputs[i] = inputs[i];
+            }
             var sum = 0.0;
             for (int i = 0; i < inputs.Count; i++)
             {
@@ -75,15 +109,37 @@ namespace NeuralNetworks.BL
         }
 
         /// <summary>
-        /// Установка весов
+        /// сигмоида для вычисления вых. рез
         /// </summary>
-        /// <param name="weights"></param>
-        public void SetWights(params double[] weights)
+        /// <param name="x">от какого значения берется</param>
+        /// <returns></returns>
+        private double SigmoidDx(double x)
         {
-            ///TODO: удалить после возможности обучения сети
-            for (int i = 0; i < weights.Length; i++)
+            var sigmoid = Sigmoid(x);
+            var result = sigmoid / (1 - sigmoid);
+            return result;
+        }
+
+        /// <summary>
+        /// изменение нейрона.
+        /// </summary>
+        /// <param name="error"> шибка нейрона </param>
+        /// <param name="learningRate"> сила измениения - скорость обучения</param>
+        public void Learn(double error, double learningRate)
+        {
+            if (NeuronType==NeuronType.Input)
             {
-                Weights[i] = weights[i];
+                return;
+            }
+            Delta = error * SigmoidDx(Output);
+
+            for (int i = 0; i < Weights.Count; i++)
+            {
+                var weight = Weights[i];
+                var input = Inputs[i];
+
+                var newWeight = weight - input * Delta * learningRate;
+                Weights[i] = newWeight;
             }
         }
 

@@ -14,8 +14,9 @@ namespace NeuralNetworks.BL
         /// <summary>
         /// Число нейронов в слое
         /// </summary>
-        public int Count => Neurons?.Count ?? 0;
+        public int NeuronCount => Neurons?.Count ?? 0;
 
+        public NeuronType NeuronType;
 
         /// <summary>
         /// 
@@ -26,6 +27,7 @@ namespace NeuralNetworks.BL
         {
             //Todo: проверить все вх нейроны на соотв типу
             Neurons = neurons;
+            NeuronType = neuronType;
         }
 
 
@@ -41,6 +43,11 @@ namespace NeuralNetworks.BL
                 result.Add(neuron.Output);
             }
             return result;
+        }
+
+        public override string ToString()
+        {
+            return NeuronType.ToString();
         }
     }
 }
