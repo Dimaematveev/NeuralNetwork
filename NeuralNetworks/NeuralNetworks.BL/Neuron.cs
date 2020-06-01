@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace NeuralNetworks.BL
 {
+    /// <summary>
+    /// Нейрон
+    /// </summary>
     public class Neuron
     {
       
@@ -40,7 +43,7 @@ namespace NeuralNetworks.BL
         /// Слева направо сеть. 
         /// </summary>
         /// <param name="inputs">Список вход. сигналов - на 1 нейрон приходят, кол-во сигналов==кол-во весов</param>
-        /// <returns></returns>
+        /// <returns>Сохранение состояния</returns>
         public double FeedForward(List<double> inputs)
         {
             var sum = 0.0;
@@ -63,6 +66,19 @@ namespace NeuralNetworks.BL
         {
             var result = 1.0 / (1.0 + Math.Pow(Math.E, -x));
             return result;
+        }
+
+        /// <summary>
+        /// Установка весов
+        /// </summary>
+        /// <param name="weights"></param>
+        public void SetWights(params double[] weights)
+        {
+            ///TODO: удалить после возможности обучения сети
+            for (int i = 0; i < weights.Length; i++)
+            {
+                Weights[i] = weights[i];
+            }
         }
 
         public override string ToString()
