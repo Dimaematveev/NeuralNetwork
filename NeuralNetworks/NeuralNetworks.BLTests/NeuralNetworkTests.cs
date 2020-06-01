@@ -127,5 +127,12 @@ namespace NeuralNetworks.BL.Tests
                Assert.AreEqual(expected, actual);
             }
         }
+
+
+        [TestMethod()]
+        public void RecognizeImages()
+        {
+            var parasitezedPath = @"";
+        }
     }
 }
