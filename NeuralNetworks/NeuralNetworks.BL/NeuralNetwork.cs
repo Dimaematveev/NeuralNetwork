@@ -63,12 +63,15 @@ namespace NeuralNetworks.BL
         /// <summary>
         /// обучение
         /// </summary>
-        /// <param name="dataset"> на чем обучать соответственно 1-ожидаемый результат, 2- вх параметры</param>
+        /// <param name="expected"> на чем обучать соответственно ожидаемый результат </param>
+        /// <param name="inputs"> на чем обучать соответственно  вх параметры</param>
         /// <param name="epoch"> кол-во эпох - сколько раз обучить на этом dataset</param>
         /// <returns></returns>
         public double Learn(double[] expected, double[,] inputs, int epoch)
         {
+            //var signals = Normalization(inputs);
             var error = 0.0;
+            Debug.WriteLine($"Началось обучение предстоит: \n{epoch}-эпох; \n{inputs.GetLength(1)}-Столбцов; \n{inputs.GetLength(0)}-Строк.");
             for (int i = 0; i < epoch; i++)
             {
                 for (int j = 0; j < expected.Length; j++)
@@ -77,13 +80,13 @@ namespace NeuralNetworks.BL
                     var input = GetRow(inputs, j);
 
                     error += Backpropagation(output, input);
-                    if (i % 100 == 0)
-                    {
-                        Debug.WriteLine(i);
-                    }
-
+                }
+                if (i % 10 == 1)
+                {
+                    Debug.WriteLine(i);
                 }
             }
+            Debug.WriteLine($"Окончилось обучение.");
             var result = error / epoch;
             return result;
         }
